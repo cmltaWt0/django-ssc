@@ -82,7 +82,7 @@ def xml_request(login_name):
     msg_result = ['Caramba...']
     delete = False
 
-    root = ET.parse(PATH + '/getStatus.xml').getroot()
+    root = ET.parse(PATH + '/../getStatus.xml').getroot()
     root.set('principal', ssc_login)
     root.set('credentials', ssc_pass)
     for i in root.iter():
@@ -138,7 +138,12 @@ def make_human_readable(result):
                 if '=' in i and \
                         ('Timestamp' in i or 'UserIpAddr' in i
                          or 'Domain' in i or 'NASPort' in i):
-                    msg_result['Session ' + str(sec)].append(i)
+                    try:
+                        i.decode('utf-8')
+                    except UnicodeDecodeError:
+                        pass
+                    else:
+                        msg_result['Session ' + str(sec)].append(i)
             sec += 1
 
     return msg_result, delete
